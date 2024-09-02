@@ -1,0 +1,86 @@
+@startuml citas
+
+left to right direction
+skinparam actorStyle awesome
+
+actor profesional <<psicologo,odontologo,medico,enfermero>> #c74a4e
+actor sistema <<no humano>> #bf592a
+actor estudiante #776be8
+
+(hacer una búsqueda sobre la informacion del estudiante) as busqueda
+
+(Solicita cita) as solicita
+
+(Cancelar cita) as cancelar
+
+(Genera formulario) as generaForm
+
+(Notifica por correo) as notificaCorreo
+
+(Recibe notificacion) as recibeNotificacion
+
+(definir su disponibilidad) as definirDispo
+
+(Mostrar horarios disponibles para reservar cita) as mostrarHorarios
+
+(Visualiza sus citas) as visualizaCita
+
+(excede cantidad de citas) as alertaExcedeCita
+
+(establece horario disponible) as estableceHorario
+
+(contar citas) as contarCitas
+
+(delimita días disponibles a los siguientes) as delimitaDiasDisponibles
+
+(marca un caso que requiere un seguimiento) as marcaCasoSeguimiento
+
+(continua con el mismo profesional en la siguiente cita) as continuaProfesionalCita
+
+(agrega comentario sobre consulta realizada) as agregaComentario
+
+(inclementa historia del estudiante) as inclementaHistoria
+
+usecase consultar as "consulta información personal sobre el estudiante
+alergias, enfermedades, condiciones y antecedentes médicos."
+
+usecase llenarForm as "Llena formulario con nombre, codigo, 
+programa, disponibilidad horaria"
+
+profesional --> consultar #c74a4e
+profesional --> recibeNotificacion #c74a4e
+profesional --> definirDispo #c74a4e
+profesional --> marcaCasoSeguimiento #c74a4e
+profesional --> agregaComentario #c74a4e
+
+busqueda <- sistema #bf592a
+generaForm <-- sistema #bf592a
+notificaCorreo <-- sistema #bf592a
+mostrarHorarios <-- sistema #bf592a
+contarCitas <-- sistema #bf592a
+estableceHorario <-- sistema #bf592a
+alertaExcedeCita <-- sistema #bf592a
+inclementaHistoria <-- sistema #bf592a
+
+estudiante --> solicita #776be8
+estudiante --> llenarForm #776be8
+estudiante --> cancelar #776be8
+estudiante --> visualizaCita #776be8
+estudiante --> continuaProfesionalCita #776be8
+
+solicita ..> llenarForm #red;line.dashed;text:red : incluye
+solicita ..> mostrarHorarios #red;line.dashed;text:red : incluye
+consultar ..> busqueda #red;line.dashed;text:red : incluye
+llenarForm ..> generaForm #red;line.dashed;text:red : incluye
+notificaCorreo ..> solicita #red;line.dashed;text:red : incluye
+recibeNotificacion ..> notificaCorreo #red;line.dashed;text:red : incluye
+visualizaCita ..> mostrarHorarios #red;line.dashed;text:red : incluye
+cancelar <.. estableceHorario #red;line.dashed;text:red : incluye
+contarCitas ..> solicita #red;line.dashed;text:red : incluye
+inclementaHistoria ..> agregaComentario #red;line.dashed;text:red : incluye
+
+cancelar ..> solicita #DarkGreen;line.dashed;text:DarkGreen : extiende
+alertaExcedeCita ..> contarCitas #DarkGreen;line.dashed;text:DarkGreen : extiende
+delimitaDiasDisponibles ..> solicita #DarkGreen;line.dashed;text:DarkGreen : extiende
+continuaProfesionalCita ..> marcaCasoSeguimiento #DarkGreen;line.dashed;text:DarkGreen : extiende
+@enduml

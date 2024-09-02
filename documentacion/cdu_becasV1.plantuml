@@ -1,0 +1,65 @@
+@startuml becas
+
+left to right direction
+
+skinparam actorStyle awesome
+'RGB
+actor monitor #c74a4e
+actor usuario #776be8
+actor sistema <<No humano>> #bf592a
+
+(Reserva de almuerzos ó refrigerios) as reserva
+
+(Generación de código QR único) as generacionQR
+
+(escanea el codigo del estudiante) as escanea
+
+(visualiza nombre, hora y tipo de comida) as visualiza
+
+usecase limitaCreacionQR as "Limita la creación de QR
+para más de un estudiante por día"
+
+(Habilita códigos para escaner) as habilita
+
+(Muestra alerta, código ya fue escaneado) as alertaYaFueEscaneado
+
+(Muestra alerta, fuera de horario) as alertaFueraHorario
+
+usecase MuestraCantidadComida as "Muestra cantidad de comida 
+disponible para venta libre" 
+
+(Generar un informe diario) as generarInformeDia
+
+(Notificar finalización del semestre) as notificaFinalizacionSemestre
+
+(Reiniciar la base de datos para becas) as reiniciarBD
+
+(Generar un informe del semestre) as generarInformeSemestre
+
+usuario ---> reserva #776be8
+generacionQR <. reserva: incluye
+
+escanea <-- monitor #c74a4e
+visualiza <- monitor #c74a4e
+
+sistema --> limitaCreacionQR #bf592a
+generacionQR ..> limitaCreacionQR : incluye
+
+sistema -> habilita #bf592a
+
+sistema --> alertaFueraHorario #bf592a
+alertaFueraHorario .> escanea : extiende
+
+sistema --> alertaYaFueEscaneado #bf592a
+alertaYaFueEscaneado .> escanea : extiende
+
+sistema -> MuestraCantidadComida #bf592a
+
+sistema -> generarInformeDia #bf592a
+
+sistema --> notificaFinalizacionSemestre #bf592a
+reiniciarBD <-- monitor #c74a4e
+
+notificaFinalizacionSemestre .> reiniciarBD : incluye
+
+@enduml
